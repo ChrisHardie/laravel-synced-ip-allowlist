@@ -31,13 +31,12 @@ class EncryptIpAllowlistCommand extends Command
 
         $this->info("Enter allowed IPs/ranges (one per line). Finish input with CTRL+D (Linux/macOS) or CTRL+Z (Windows):");
 
-        $handle = fopen('php://stdin', 'rb');
         $input = '';
 
+        $handle = fopen('php://stdin', 'rb');
         while (($line = fgets($handle)) !== false) {
             $input .= $line;
         }
-
         fclose($handle);
 
         $plaintext = trim($input);
@@ -48,6 +47,6 @@ class EncryptIpAllowlistCommand extends Command
         $this->info('Encrypted IP list:');
         $this->line($encrypted);
 
-        return Command::SUCCESS;
+        return self::SUCCESS;
     }
 }

@@ -33,26 +33,26 @@ class SyncedIpAllowlistCommand extends Command
             return self::FAILURE;
         }
 
+        // Decrypt the IP addresses
         $base64Key = config('synced-ip-allowlist.allowed_ips_key');
         $decodedKey = base64_decode(Str::after($base64Key, 'base64:'), true);
-
         if (! $decodedKey || strlen($decodedKey) !== 32) {
             throw new \RuntimeException('Invalid key length for AES-256-CBC');
         }
-
         $encrypter = new Encrypter($decodedKey, 'AES-256-CBC');
         $plaintext = $encrypter->decryptString($response->body());
 
+        // Filter out comments and blank lines
         $cidrs = collect(explode("\n", $plaintext))
             ->map(fn ($line) => trim($line))
             ->filter(fn ($line) => $line && ! str_starts_with($line, '#'))
             ->values()
             ->all();
 
+        // Store the CIDRs in the cache for use by the middleware
         Cache::put(
             config('synced-ip-allowlist.allowed_ips_cache_key'),
-            $cidrs,
-            now()->addHours(config('synced-ip-allowlist.allowed_ips_cache_expire'))
+            $cidrs
         );
 
         $this->info("Cached " . count($cidrs) . " CIDRs.");
