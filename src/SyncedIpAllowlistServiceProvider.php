@@ -2,6 +2,7 @@
 
 namespace ChrisHardie\SyncedIpAllowlist;
 
+use ChrisHardie\SyncedIpAllowlist\Commands\EncryptIpAllowlistCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use ChrisHardie\SyncedIpAllowlist\Commands\SyncedIpAllowlistCommand;
@@ -18,6 +19,9 @@ class SyncedIpAllowlistServiceProvider extends PackageServiceProvider
         $package
             ->name('laravel-synced-ip-allowlist')
             ->hasConfigFile()
-            ->hasCommand(SyncedIpAllowlistCommand::class);
+            ->hasCommands([
+                SyncedIpAllowlistCommand::class,
+                EncryptIpAllowlistCommand::class,
+            ]);
     }
 }
