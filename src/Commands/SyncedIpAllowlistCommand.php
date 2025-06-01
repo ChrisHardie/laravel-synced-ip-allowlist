@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace ChrisHardie\SyncedIpAllowlist\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class SyncedIpAllowlistCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'laravel-synced-ip-allowlist';
 
     public $description = 'My command';
 
