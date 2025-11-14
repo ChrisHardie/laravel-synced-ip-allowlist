@@ -65,7 +65,7 @@ return [
 Encrypt your list of IP addresses:
 
 ```bash
-php artisan artisan ip-allowlist:encrypt
+php artisan ip-allowlist:encrypt
 ```
 
 Paste or type in the list of IPs and get the encrypted result:
@@ -106,7 +106,19 @@ $ php artisan schedule:list | grep ip-allowlist
 
 ### Use the Middleware to Protect a Route
 
-In `app/Http/Kernel.php`, add an entry to the list of named, available HTTP route middleware:
+In `bootstrap/app.php`, create or add to the list of available middleware aliases:
+
+```php
+        ...
+        ->withMiddleware(function (Middleware $middleware) {
+            $middleware->alias([
+                'allowed-ips' => \ChrisHardie\SyncedIpAllowlist\Http\Middleware\RestrictByAllowedIps::class,
+            ]);
+        })
+        ...
+```
+
+Or, for older versions of Laravel, in `app/Http/Kernel.php`, add an entry to the list of named, available HTTP route middleware:
 
 ```php
 protected $routeMiddleware = [
